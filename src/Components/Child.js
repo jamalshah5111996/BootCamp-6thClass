@@ -3,7 +3,7 @@ import {TransactionContext} from './transactionContext.js'
 
 function Child() {
 
-    let {transactions,addTransaction}=useContext(TransactionContext);
+    let {transactions,addTransaction,deleteTransaction}=useContext(TransactionContext);
     let[newDesc,setDesc] = useState("");
     let[newAmount,setAmount] = useState("");
 
@@ -15,6 +15,7 @@ function Child() {
   }
       console.log(newDesc,newAmount);
       addTransaction({
+        id: Math.floor(Math.random() * 100000000),
         amount: Number(newAmount),
         desc: newDesc
       })
@@ -54,11 +55,17 @@ function Child() {
       <hr/>
 
       <ul className="transactionList">
-          {transactions.map((transObj,ind)=>{
+          {transactions.map((transObj,id)=>{
               return(
-            <li key={ind}>
+            <li className={transObj.amount < 0 ? "minus" : "plus"} key={transObj.id}>
                 <span>{transObj.desc}</span>
                 <span>${transObj.amount}</span>
+                <button
+                  className="xButton"
+                  onClick={() => deleteTransaction(transObj.id)}
+                >
+                  X
+                </button>
             </li>
               )})}
       </ul>
